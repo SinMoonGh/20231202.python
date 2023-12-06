@@ -1,0 +1,41 @@
+def find_union(parent, x):
+    if parent[x] != x:
+        parent[x] = find_union(parent, parent[x])
+    return parent[x]
+
+def parent_union(parent, a, b):
+    a = find_union(parent, a)
+    b = find_union(parent, b)
+
+    if a < b:
+        parent[b] = a
+    else:
+        parent[a] = b
+
+
+n, e = map(int, input().split())
+parent= [0] * (n+1)
+cost = []
+result =0
+
+for i in range(n+1):
+    parent[i]=i
+
+for _ in range(e):
+    a, b, k = map(int, input().split())
+    cost.append((k, a, b))
+
+cost.sort()
+big_cost= 0
+
+for costs in cost:
+    k, a, b = costs
+
+    if find_union(parent, a) != find_union(parent, b):
+        parent_union(parent, a, b)
+        result+=k
+        big_cost = k
+
+print(cost)
+print(result-big_cost)
+print(parent)
